@@ -1,7 +1,8 @@
 use super::{Card, Color, Kind};
 use ::core::Core;
 use ::put::{self, PutCard};
-use ::result::Result;
+use ::result::{End, Result};
+use ::rule::may_open_door;
 
 static DOOR_KIND: Kind = Kind::Door;
 
@@ -29,16 +30,35 @@ impl Card for Door {
         false
     }
 
-    fn on_drawn(&self, _: &Core) -> Box<PutCard> {
-        Box::new(put::Noop)
+    fn on_drawn(&self, core: &mut Core) -> Result<Box<PutCard>> {
+        let do_open = if may_open_door(&core.content, self.color) {
+            core.actor.open_door(&core.content)
+        } else {
+            false
+        };
+        if do_open {
+            let mut key_idx = None;
+            for (idx, card) in core.content.hand.iter().enumerate() {
+                if card.get_kind() == &Kind::Key {
+                    key_idx = Some(idx);
+                    break;
+                }
+            }
+            let idx = key_idx.ok_or(End::ShouldNotReach)?;
+            let key_card = core.content.hand.swap_remove(idx);
+            core.content.put_discard(key_card);
+            Ok(Box::new(put::Opened))
+        } else {
+            Ok(Box::new(put::Limbo))
+        }
     }
 
-    fn on_played(&self, core: &Core) -> Result<Box<PutCard>> {
-        Ok(Box::new(put::Noop))
+    fn on_played(&self, _: &mut Core) -> Result<Box<PutCard>> {
+        Err(End::ShouldNotReach)
     }
 
-    fn on_discarded(&self, core: &Core) -> Result<Box<PutCard>> {
-        Ok(Box::new(put::Discarded))
+    fn on_discarded(&self, _: &mut Core) -> Result<Box<PutCard>> {
+        Err(End::ShouldNotReach)
     }
 
     fn clone_into_box(&self) -> Box<Card> {

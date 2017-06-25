@@ -3,7 +3,7 @@ pub enum Phase1Action {
     Discard,
 }
 
-pub enum Nightmare {
+pub enum NightmareAction {
     ByKey,
     ByDoor,
     ByHand,

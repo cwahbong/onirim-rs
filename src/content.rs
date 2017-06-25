@@ -1,4 +1,5 @@
 use ::card::{Card, Color, Kind};
+use ::result::{End, Result};
 
 use rand::{Rng, thread_rng};
 
@@ -31,11 +32,7 @@ impl Content {
                 break;
             }
         }
-        if let Some(idx) = door_idx {
-            Some(self.undrawn.swap_remove(idx))
-        } else {
-            None
-        }
+        door_idx.map(|idx| { self.undrawn.swap_remove(idx) })
     }
 
     fn do_draw(&mut self, count: usize) -> Option<Vec<Box<Card>>> {
@@ -67,15 +64,21 @@ impl Content {
         self.hand.push(card);
     }
 
-    pub fn replenish_hand(&mut self) { // TODO what if cannot draw?
+    pub fn discard_hand(&mut self) {
+        self.discarded.append(&mut self.hand);
+    }
+
+    pub fn replenish_hand(&mut self) -> Result<()> {
         while self.hand.len() < 5 {
-            let card = self.do_draw(1).unwrap().pop().unwrap();
+            let mut drawn = self.do_draw(1).ok_or(End::Lose)?;
+            let card = drawn.pop().ok_or(End::ShouldNotReach)?;
             if card.is_location() {
                 self.hand.push(card)
             } else {
                 self.limbo.push(card)
             }
         }
+        Ok(())
     }
 
     pub fn shuffle_undrawn(&mut self) {

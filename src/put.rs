@@ -5,12 +5,6 @@ pub trait PutCard {
     fn perform(&self, &mut Content, Box<Card>);
 }
 
-pub struct Noop;
-
-impl PutCard for Noop {
-    fn perform(&self, _: &mut Content, _: Box<Card>) {}
-}
-
 pub struct Hand;
 
 impl PutCard for Hand {
@@ -32,5 +26,21 @@ pub struct Discarded;
 impl PutCard for Discarded {
     fn perform(&self, content: &mut Content, card: Box<Card>) {
         content.discarded.push(card)
+    }
+}
+
+pub struct Limbo;
+
+impl PutCard for Limbo {
+    fn perform(&self, content: &mut Content, card: Box<Card>) {
+        content.limbo.push(card)
+    }
+}
+
+pub struct Opened;
+
+impl PutCard for Opened {
+    fn perform(&self, content: &mut Content, card: Box<Card>) {
+        content.opened.push(card)
     }
 }

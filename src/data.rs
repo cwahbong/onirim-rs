@@ -33,3 +33,13 @@ pub fn starting_cards_basic() -> Vec<Box<Card>> {
 pub fn starting_content_basic() -> Content {
     Content::new(starting_cards_basic())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn starting_cards_basic_len() {
+        assert_eq!(76, starting_cards_basic().len());
+    }
+}

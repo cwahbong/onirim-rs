@@ -13,10 +13,11 @@ impl Runner {
         Runner { core: core }
     }
 
-    fn setup(&mut self) {
+    fn setup(&mut self) -> Result<()> {
         self.core.content.shuffle_undrawn();
-        self.core.content.replenish_hand();
+        self.core.content.replenish_hand()?;
         self.core.content.shuffle_limbo_to_undrawn();
+        Ok(())
     }
 
     fn phase_1(&mut self) -> Result<()> {
@@ -37,7 +38,7 @@ impl Runner {
                 return Err(End::Lose);
             } else {
                 let card = cards.unwrap().pop().unwrap();
-                let put = card.on_drawn(&mut self.core);
+                let put = card.on_drawn(&mut self.core)?;
                 put.perform(&mut self.core.content, card);
             }
         }
@@ -50,7 +51,7 @@ impl Runner {
     }
 
     fn whole(&mut self) -> Result<()> {
-        self.setup();
+        self.setup()?;
         loop {
             self.phase_1()?;
             self.phase_2()?;
