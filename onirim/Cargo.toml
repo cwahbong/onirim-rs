@@ -1,0 +1,7 @@
+[package]
+name = "onirim"
+version = "0.0.1"
+authors = ["Ahbong Chang <cw.ahbong+onirim@gmail.com>"]
+
+[dependencies]
+rand = "0.3.0"

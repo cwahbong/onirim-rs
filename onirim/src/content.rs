@@ -3,6 +3,7 @@ use ::result::{End, Result};
 
 use rand::{Rng, thread_rng};
 
+#[derive(Clone)]
 pub struct Content {
     pub undrawn: Vec<Box<Card>>,
     pub discarded: Vec<Box<Card>>,

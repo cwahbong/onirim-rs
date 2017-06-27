@@ -50,13 +50,19 @@ impl Runner {
         Ok(())
     }
 
-    fn whole(&mut self) -> Result<()> {
+    fn do_whole(&mut self) -> Result<()> {
         self.setup()?;
         loop {
             self.phase_1()?;
             self.phase_2()?;
             self.phase_3()?;
         }
+    }
+
+    fn whole(&mut self) -> Result<()> {
+        let result = self.do_whole();
+        self.core.observer.on_end(&self.core.content, &result);
+        result
     }
 }
 

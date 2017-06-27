@@ -1,7 +1,4 @@
-[package]
-name = "onirim-rs"
-version = "0.0.1"
-authors = ["Ahbong Chang <cw.ahbong+onirim-rs@gmail.com>"]
-
-[dependencies]
-rand = "0.3.0"
+[workspace]
+members = [
+    "onirim",
+]

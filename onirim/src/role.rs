@@ -1,6 +1,7 @@
 use ::action::{NightmareAction, Phase1Action};
 use ::card::Card;
 use ::content::Content;
+use ::result::Result;
 
 pub trait Actor {
     fn phase_1_action(&mut self, content: &Content) -> (Phase1Action, usize);
@@ -10,5 +11,6 @@ pub trait Actor {
 }
 
 pub trait Observer {
+    fn on_end(&mut self, content: &Content, result: &Result<()>);
 }
 
