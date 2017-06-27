@@ -1,0 +1,7 @@
+[package]
+name = "onirim-ai"
+version = "0.0.1"
+authors = ["Ahbong Chang <cw.ahbong+onirim@gmail.com>"]
+
+[dependencies.onirim]
+path = "../onirim"
