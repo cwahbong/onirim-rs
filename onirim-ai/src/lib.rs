@@ -9,6 +9,7 @@ use std::fmt;
 use std::sync::{Arc, RwLock};
 
 mod result;
+pub mod util;
 
 use result::{Error, Result};
 
