@@ -38,15 +38,14 @@ impl Card for Door {
         };
         if do_open {
             let mut key_idx = None;
-            for (idx, card) in core.content.hand.iter().enumerate() {
+            for (idx, card) in core.content.get_hand().iter().enumerate() {
                 if card.get_kind() == &Kind::Key {
                     key_idx = Some(idx);
                     break;
                 }
             }
             let idx = key_idx.ok_or(End::ShouldNotReach)?;
-            let key_card = core.content.hand.swap_remove(idx);
-            core.content.put_discard(key_card);
+            core.content.discard_hand(idx);
             Ok(Box::new(put::Opened))
         } else {
             Ok(Box::new(put::Limbo))

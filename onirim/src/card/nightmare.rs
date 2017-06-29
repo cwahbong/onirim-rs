@@ -19,23 +19,21 @@ impl Nightmare {
     fn by_key(&self, content: &mut Content, idx: Option<usize>) -> Result<()> {
         let idx = idx.ok_or(End::BadParameter)?;
         {
-            let key = content.hand.get(idx).ok_or(End::BadParameter)?;
+            let key = content.get_hand().get(idx).ok_or(End::BadParameter)?;
             if key.get_kind() != &Kind::Key {
                 return Err(End::BadParameter);
             }
         }
-        let key = content.hand.swap_remove(idx);
-        content.put_discard(key);
+        content.discard_hand(idx);
         Ok(())
     }
 
     fn by_door(&self, content: &mut Content, idx: Option<usize>) -> Result<()> {
         let idx = idx.ok_or(End::BadParameter)?;
-        if idx >= content.opened.len() {
+        if idx >= content.get_opened().len() {
             return Err(End::BadParameter);
         }
-        let door = content.opened.swap_remove(idx);
-        content.put_limbo(door);
+        content.discard_opened(idx);
         Ok(())
     }
 
@@ -43,7 +41,7 @@ impl Nightmare {
         if idx.is_some() {
             return Err(End::BadParameter);
         }
-        content.discard_hand();
+        content.discard_all_hand();
         content.replenish_hand()?;
         Ok(())
     }

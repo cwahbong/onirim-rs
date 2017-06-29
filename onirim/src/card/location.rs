@@ -2,7 +2,7 @@ use super::{Card, Color, Kind};
 use ::core::Core;
 use ::put::{self, PutCard};
 use ::result::{End, Result};
-use ::rule::can_obtain_door;
+use ::rule::{can_obtain_door, put_opened_and_check};
 
 #[derive(Clone)]
 struct Location {
@@ -37,19 +37,16 @@ impl Card for Location {
     }
 
     fn on_played(&self, core: &mut Core) -> Result<Box<PutCard>> {
-        if let Some(last_card) = core.content.explored.last() {
+        if let Some(last_card) = core.content.get_explore().last() {
             if *last_card.get_kind() == self.kind {
                 // LOG ERROR
                 return Ok(Box::new(put::Hand));
             }
         }
         if can_obtain_door(&core.content) {
-            let color = *core.content.explored.last().unwrap().get_color();
+            let color = *core.content.get_explore().last().unwrap().get_color();
             if let Some(door) = core.content.pull_door(color) {
-                core.content.opened.push(door);
-                if core.content.opened.len() == 8  {
-                    return Err(End::Win);
-                }
+                put_opened_and_check(&mut core.content, door)?;
             }
         }
         Ok(Box::new(put::Explored))
@@ -64,7 +61,7 @@ impl Card for Location {
                 .collect();
             // TODO check indices
             if let Some(optioned_card) = optioned_drawn.get_mut(discarded_idx) {
-                core.content.discarded.push(optioned_card.take().unwrap());
+                core.content.put_discard(optioned_card.take().unwrap());
             }
             for idx in back_idxs.into_iter().rev() {
                 if let Some(optioned_card) = optioned_drawn.get_mut(idx) {

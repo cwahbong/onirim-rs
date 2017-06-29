@@ -22,25 +22,24 @@ impl Runner {
 
     fn phase_1(&mut self) -> Result<()> {
         let (action, idx) = self.core.actor.phase_1_action(&self.core.content);
-        let card = self.core.content.hand.swap_remove(idx);
+        let card = self.core.content.take_hand(idx);
         let put = match action {
             Phase1Action::Play => card.on_played(&mut self.core)?,
             Phase1Action::Discard => card.on_discarded(&mut self.core)?,
         };
-        put.perform(&mut self.core.content, card);
+        put.perform(&mut self.core.content, card)?;
         Ok(())
     }
 
     fn phase_2(&mut self) -> Result<()> {
-        while self.core.content.hand.len() < 5 {
+        while self.core.content.get_hand().len() < 5 {
             let cards = self.core.content.draw(1);
             if cards.is_none() {
-                return Err(End::Lose);
-            } else {
-                let card = cards.unwrap().pop().unwrap();
-                let put = card.on_drawn(&mut self.core)?;
-                put.perform(&mut self.core.content, card);
+                return Err(End::Lose)
             }
+            let card = cards.unwrap().pop().unwrap();
+            let put = card.on_drawn(&mut self.core)?;
+            put.perform(&mut self.core.content, card)?;
         }
         Ok(())
     }

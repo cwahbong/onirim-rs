@@ -5,12 +5,12 @@ use rand::{Rng, thread_rng};
 
 #[derive(Clone)]
 pub struct Content {
-    pub undrawn: Vec<Box<Card>>,
-    pub discarded: Vec<Box<Card>>,
-    pub limbo: Vec<Box<Card>>,
-    pub explored: Vec<Box<Card>>,
-    pub opened: Vec<Box<Card>>,
-    pub hand: Vec<Box<Card>>,
+    undrawn: Vec<Box<Card>>,
+    discarded: Vec<Box<Card>>,
+    limbo: Vec<Box<Card>>,
+    explored: Vec<Box<Card>>,
+    opened: Vec<Box<Card>>,
+    hand: Vec<Box<Card>>,
 }
 
 impl Content {
@@ -49,24 +49,64 @@ impl Content {
         self.do_draw(count)
     }
 
+    pub fn get_discard(&self) -> &Vec<Box<Card>> {
+        &self.discarded
+    }
+
+    pub fn get_limbo(&self) -> &Vec<Box<Card>> {
+        &self.limbo
+    }
+
+    pub fn get_explore(&self) -> &Vec<Box<Card>> {
+        &self.explored
+    }
+
+    pub fn get_opened(&self) -> &Vec<Box<Card>> {
+        &self.opened
+    }
+
+    pub fn get_hand(&self) -> &Vec<Box<Card>> {
+        &self.hand
+    }
+
     pub fn put_undrawn(&mut self, card: Box<Card>) {
-        self.undrawn.push(card);
+        self.undrawn.push(card)
     }
 
     pub fn put_discard(&mut self, card: Box<Card>) {
-        self.discarded.push(card);
+        self.discarded.push(card)
     }
 
     pub fn put_limbo(&mut self, card: Box<Card>) {
-        self.limbo.push(card);
+        self.limbo.push(card)
+    }
+
+    pub fn put_explore(&mut self, card: Box<Card>) {
+        self.explored.push(card)
+    }
+
+    pub fn put_opened(&mut self, card: Box<Card>) {
+        self.opened.push(card)
     }
 
     pub fn put_hand(&mut self, card: Box<Card>) {
-        self.hand.push(card);
+        self.hand.push(card)
     }
 
-    pub fn discard_hand(&mut self) {
-        self.discarded.append(&mut self.hand);
+    pub fn take_hand(&mut self, idx: usize) -> Box<Card> {
+        self.hand.swap_remove(idx)
+    }
+
+    pub fn discard_opened(&mut self, idx: usize) {
+        self.discarded.push(self.opened.swap_remove(idx))
+    }
+
+    pub fn discard_hand(&mut self, idx: usize) {
+        self.discarded.push(self.hand.swap_remove(idx))
+    }
+
+    pub fn discard_all_hand(&mut self) {
+        self.discarded.append(&mut self.hand)
     }
 
     pub fn replenish_hand(&mut self) -> Result<()> {
@@ -83,13 +123,13 @@ impl Content {
     }
 
     pub fn shuffle_undrawn(&mut self) {
-        thread_rng().shuffle(&mut self.undrawn);
+        thread_rng().shuffle(&mut self.undrawn)
     }
 
     pub fn shuffle_limbo_to_undrawn(&mut self) {
         if !self.limbo.is_empty() {
             self.undrawn.append(&mut self.limbo);
-            thread_rng().shuffle(&mut self.undrawn);
+            thread_rng().shuffle(&mut self.undrawn)
         }
     }
 }
