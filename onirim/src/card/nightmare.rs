@@ -33,7 +33,8 @@ impl Nightmare {
         if idx >= content.get_opened().len() {
             return Err(End::BadParameter);
         }
-        content.discard_opened(idx);
+        let door = content.take_opened(idx);
+        content.put_limbo(door);
         Ok(())
     }
 

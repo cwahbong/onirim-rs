@@ -39,7 +39,7 @@ impl Card for Door {
         if do_open {
             let mut key_idx = None;
             for (idx, card) in core.content.get_hand().iter().enumerate() {
-                if card.get_kind() == &Kind::Key {
+                if card.get_kind() == &Kind::Key && card.get_color() == self.get_color() {
                     key_idx = Some(idx);
                     break;
                 }
