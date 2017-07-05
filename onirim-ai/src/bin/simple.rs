@@ -6,8 +6,8 @@ use onirim::action::{Phase1Action, NightmareAction};
 use onirim::content::Content;
 use onirim::role::Actor;
 use onirim::rule::combo_count;
+use onirim::util::Count;
 use onirim_ai::{run_experiment_basic, NewBoxActor};
-use onirim_ai::util::Count;
 
 fn first_idx_of_kind<'a, I: Iterator<Item=&'a Box<Card>>>(iter: I, kind: &Kind) -> Option<usize> {
     iter.enumerate()
@@ -173,12 +173,12 @@ impl Actor for SimpleActor {
 struct SimpleNewBoxActor;
 
 impl NewBoxActor for SimpleNewBoxActor {
-    fn new_box_actor() -> Box<Actor> {
+    fn new_box_actor(&self) -> Box<Actor> {
         Box::new(SimpleActor)
     }
 }
 
 fn main() {
-    let statistic = run_experiment_basic::<SimpleNewBoxActor>().unwrap();
+    let statistic = run_experiment_basic(SimpleNewBoxActor).unwrap();
     println!("{}", statistic);
 }

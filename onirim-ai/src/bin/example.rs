@@ -30,12 +30,12 @@ impl Actor for ExampleActor {
 struct ExampleNewBoxActor;
 
 impl NewBoxActor for ExampleNewBoxActor {
-    fn new_box_actor() -> Box<Actor> {
+    fn new_box_actor(&self) -> Box<Actor> {
         Box::new(ExampleActor)
     }
 }
 
 fn main() {
-    let statistic = run_experiment_basic::<ExampleNewBoxActor>().unwrap();
+    let statistic = run_experiment_basic(ExampleNewBoxActor).unwrap();
     println!("{}", statistic);
 }

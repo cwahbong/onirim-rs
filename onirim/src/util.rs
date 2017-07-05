@@ -1,4 +1,4 @@
-use onirim::card::{Card, Color, Kind};
+use ::card::{Card, Color, Kind};
 
 use std::collections::BTreeMap;
 use std::iter::Iterator;

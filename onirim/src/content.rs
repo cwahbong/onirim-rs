@@ -1,5 +1,6 @@
 use ::card::{Card, Color, Kind};
 use ::result::{End, Result};
+use ::util::Count;
 
 use rand::{Rng, thread_rng};
 
@@ -93,6 +94,10 @@ impl Content {
         self.hand.push(card)
     }
 
+    pub fn take_opened(&mut self, idx: usize) -> Box<Card> {
+        self.opened.swap_remove(idx)
+    }
+
     pub fn take_hand(&mut self, idx: usize) -> Box<Card> {
         self.hand.swap_remove(idx)
     }
@@ -131,5 +136,29 @@ impl Content {
             self.undrawn.append(&mut self.limbo);
             thread_rng().shuffle(&mut self.undrawn)
         }
+    }
+
+    pub fn count_undrawn(&self) -> Count {
+        Count::count(self.undrawn.iter())
+    }
+
+    pub fn count_discard(&self) -> Count {
+        Count::count(self.discarded.iter())
+    }
+
+    pub fn count_limbo(&self) -> Count {
+        Count::count(self.limbo.iter())
+    }
+
+    pub fn count_explore(&self) -> Count {
+        Count::count(self.explored.iter())
+    }
+
+    pub fn count_opened(&self) -> Count {
+        Count::count(self.opened.iter())
+    }
+
+    pub fn count_hand(&self) -> Count {
+        Count::count(self.hand.iter())
     }
 }
