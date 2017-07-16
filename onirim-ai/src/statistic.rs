@@ -30,6 +30,7 @@ pub struct Statistic {
     pub lose_game: u32,
     pub success_game: u32,
     pub total_game: u32,
+    pub opened: u32,
 }
 
 impl Statistic {
@@ -39,6 +40,7 @@ impl Statistic {
             lose_game: 0,
             success_game: 0,
             total_game: 0,
+            opened: 0,
         }
     }
 }
@@ -48,6 +50,7 @@ impl fmt::Display for Statistic {
         writeln!(formatter, "win: {}", self.win_game)?;
         writeln!(formatter, "total: {}", self.success_game)?;
         writeln!(formatter, "tried: {}", self.total_game)?;
+        writeln!(formatter, "avg opened: {}", self.opened as f64 / self.success_game as f64)?;
         let report = CountStatisticReport::new(self.win_game as f64, self.success_game as f64);
         write!(formatter, "win ratio: {:.3}% mean, {:.3e} ({:.3}%) stdev, {:.3e} ({:.3}%) sem",
             report.mean, report.std_ev, report.std_ev_pct,

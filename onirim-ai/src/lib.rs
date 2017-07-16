@@ -25,7 +25,7 @@ impl ExperimentObserver {
 }
 
 impl Observer for ExperimentObserver {
-    fn on_end(&mut self, _: &Content, result: &onirim::result::Result<()>) {
+    fn on_end(&mut self, content: &Content, result: &onirim::result::Result<()>) {
         let mut statistic = self.statistic.try_write().unwrap();
         match *result {
             Err(onirim::result::End::Win) => {
@@ -39,6 +39,7 @@ impl Observer for ExperimentObserver {
             _ => {}
         }
         statistic.total_game += 1;
+        statistic.opened += content.get_opened().len() as u32;
     }
 }
 
