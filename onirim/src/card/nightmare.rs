@@ -89,11 +89,11 @@ impl Card for Nightmare {
     }
 
     fn on_played(&self, _: &mut Core) -> Result<Box<PutCard>> {
-        Err(End::ShouldNotReach)
+        panic!("Nightmare must not be played")
     }
 
     fn on_discarded(&self, _: &mut Core) -> Result<Box<PutCard>> {
-        Err(End::ShouldNotReach)
+        panic!("Nightmare must not be discarded")
     }
 
     fn clone_into_box(&self) -> Box<Card> {

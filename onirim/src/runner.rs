@@ -33,11 +33,8 @@ impl Runner {
 
     fn phase_2(&mut self) -> Result<()> {
         while self.core.content.get_hand().len() < 5 {
-            let cards = self.core.content.draw(1);
-            if cards.is_none() {
-                return Err(End::Lose)
-            }
-            let card = cards.unwrap().pop().unwrap();
+            let mut cards = self.core.content.draw(1).ok_or(End::Lose)?;
+            let card = cards.pop().unwrap();
             let put = card.on_drawn(&mut self.core)?;
             put.perform(&mut self.core.content, card)?;
         }

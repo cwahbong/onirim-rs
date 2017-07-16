@@ -53,11 +53,11 @@ impl Card for Door {
     }
 
     fn on_played(&self, _: &mut Core) -> Result<Box<PutCard>> {
-        Err(End::ShouldNotReach)
+        panic!("Door must not be played")
     }
 
     fn on_discarded(&self, _: &mut Core) -> Result<Box<PutCard>> {
-        Err(End::ShouldNotReach)
+        panic!("Door must not be discarded")
     }
 
     fn clone_into_box(&self) -> Box<Card> {
