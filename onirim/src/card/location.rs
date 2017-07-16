@@ -43,7 +43,7 @@ impl Card for Location {
                 return Ok(Box::new(put::Hand));
             }
         }
-        if can_obtain_door(&core.content) {
+        if can_obtain_door(&core.content, self.get_color(), self.get_kind()) {
             let color = *core.content.get_explore().last().unwrap().get_color();
             if let Some(door) = core.content.pull_door(color) {
                 put_opened_and_check(&mut core.content, door)?;

@@ -25,8 +25,10 @@ pub fn combo_count(content: &Content) -> usize {
     }
 }
 
-pub fn can_obtain_door(content: &Content) -> bool {
-    !content.get_explore().is_empty() && combo_count(content) == 0
+pub fn can_obtain_door(content: &Content, color: &Color, kind: &Kind) -> bool {
+    combo_count(content) == 2
+        && color == content.get_explore().last().unwrap().get_color()
+        && kind != content.get_explore().last().unwrap().get_kind()
 }
 
 pub fn put_opened_and_check(content: &mut Content, card: Box<Card>) -> Result<()> {
