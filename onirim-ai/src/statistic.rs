@@ -14,7 +14,7 @@ impl CountStatisticReport {
     pub fn new(numerator: f64, denominator: f64) -> Self {
         // TODO check numerator < denominator
         let mean = numerator / denominator;
-        let std_ev = mean * (1.0 - mean);
+        let std_ev = (mean * (1.0 - mean)).sqrt();
         let std_err_mean = std_ev / denominator.sqrt();
         let hundred = 100 as f64;
         CountStatisticReport {
