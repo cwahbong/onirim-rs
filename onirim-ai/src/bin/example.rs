@@ -36,6 +36,6 @@ impl NewBoxActor for ExampleNewBoxActor {
 }
 
 fn main() {
-    let statistic = run_experiment_basic(ExampleNewBoxActor).unwrap();
+    let statistic = run_experiment_basic(ExampleNewBoxActor, 10000).unwrap();
     println!("{}", statistic);
 }

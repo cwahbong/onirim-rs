@@ -1,4 +1,6 @@
 use std::fmt;
+use std::iter;
+use std::ops;
 
 pub struct CountStatisticReport {
     pub mean: f64,
@@ -55,5 +57,24 @@ impl fmt::Display for Statistic {
         write!(formatter, "win ratio: {:.3}% mean, {:.3e} ({:.3}%) stdev, {:.3e} ({:.3}%) sem",
             report.mean, report.std_ev, report.std_ev_pct,
             report.std_err_mean, report.std_err_mean_pct)
+    }
+}
+
+impl ops::Add for Statistic {
+    type Output = Statistic;
+
+    fn add(mut self, other: Statistic) -> Self::Output {
+        self.win_game += other.win_game;
+        self.lose_game += other.lose_game;
+        self.success_game += other.success_game;
+        self.total_game += other.total_game;
+        self.opened += other.opened;
+        self
+    }
+}
+
+impl iter::Sum for Statistic {
+    fn sum<I: Iterator<Item = Statistic>>(iter: I) -> Statistic {
+        iter.fold(Statistic::new(), ops::Add::add)
     }
 }
